@@ -1,0 +1,12 @@
+.navBar{ 
+    background-color: #264653;
+    height:4rem;
+    a{
+        color: #FFF;
+        transition: all 0.3s ease-in-out;
+        font-size: 18px;
+    }
+    .nav-active{
+        color: #e76f51
+    }
+}
