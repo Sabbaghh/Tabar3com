@@ -1,6 +1,8 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import { NavLink } from 'react-router-dom'
+import Container from '@material-ui/core/Container'
+import Logo from '../images/tabar3kom.png'
 import '../styles/navbar.scss'
 
 const NavBar = () => {
@@ -13,7 +15,6 @@ const NavBar = () => {
 				alignItems='center'
 				className='navBar'
 			>
-				<NavLink to='/'>Tabaro3.com</NavLink>
 				<NavLink exact to='/' activeClassName='nav-active'>
 					HOME
 				</NavLink>
@@ -24,6 +25,9 @@ const NavBar = () => {
 					LOGIN
 				</NavLink>
 			</Grid>
+			<Container className='logo-container-nav'>
+				<img src={Logo} alt='LOGO' />
+			</Container>
 		</>
 	)
 }

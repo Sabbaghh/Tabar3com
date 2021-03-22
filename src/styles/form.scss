@@ -1,0 +1,22 @@
+.Form-container{ 
+    height:90vh;
+    display: flex !important;
+    justify-content:center;
+    align-items:center;
+    form{
+        border: 1px solid gray;
+        padding: 5rem;
+      .input{
+        width:20rem;
+        margin-top: 0.5rem;
+    }  
+    }
+    
+}
+.logo-container{
+    background-color: #000;
+    width: 20rem  !important;
+    img{
+        width: 100%;
+    }
+}
