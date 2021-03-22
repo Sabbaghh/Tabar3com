@@ -96,18 +96,6 @@ const Register = () => {
 						required
 					/>
 					<TextField
-						className='input'
-						id='filled-basic'
-						label='Phone number'
-						placeholder='07xxxxxxxxx'
-						variant='filled'
-						type='tel'
-						name='phone'
-						inputRef={register}
-						color='primary'
-						required
-					/>
-					<TextField
 						id='select'
 						label='Gender'
 						value='Male'
