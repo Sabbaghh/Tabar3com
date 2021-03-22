@@ -15,14 +15,20 @@ const NavBar = () => {
 				alignItems='center'
 				className='navBar'
 			>
-				<NavLink exact to='/' activeClassName='nav-active'>
-					HOME
-				</NavLink>
 				<NavLink to='/About' activeClassName='nav-active'>
-					ABOUT
+					تواصل معنا
+				</NavLink>
+				<NavLink exact to='/charities' activeClassName='nav-active'>
+					الجمعيات الخيرية
+				</NavLink>
+				<NavLink exact to='/' activeClassName='nav-active'>
+					الرئيسية
+				</NavLink>
+				<NavLink exact to='/calculator' activeClassName='nav-active'>
+					حساب الزكاة
 				</NavLink>
 				<NavLink to='/login' activeClassName='nav-active'>
-					LOGIN
+					تسجيل دخول
 				</NavLink>
 			</Grid>
 			<Container className='logo-container-nav'>
