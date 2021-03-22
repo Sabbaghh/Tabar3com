@@ -1,11 +1,13 @@
 .Form-container{ 
-    height:90vh;
+    height:auto;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
     display: flex !important;
     justify-content:center;
     align-items:center;
     form{
         border: 1px solid gray;
-        padding: 5rem;
+        padding: 2rem;
       .input{
         width:20rem;
         margin-top: 0.5rem;
@@ -19,4 +21,7 @@
     img{
         width: 100%;
     }
+}
+.Gender{ 
+    background-color: #000;
 }
