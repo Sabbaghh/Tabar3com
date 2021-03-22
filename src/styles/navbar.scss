@@ -10,3 +10,14 @@
         color: #e76f51
     }
 }
+.logo-container-nav{
+    background-color: #000;
+    width: 100% !important;
+    max-width: none !important;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    img{
+        width: 30%;
+    }
+}
