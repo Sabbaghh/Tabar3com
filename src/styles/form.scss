@@ -25,3 +25,15 @@
 .Gender{ 
     background-color: #000;
 }
+
+.phone-input{
+    height:3rem;
+    padding:0;
+    input{
+        height:100% !important;
+        background-color:rgb(226, 223, 223);
+        border: none;
+        outline: none;
+        border-bottom: 1px solid;
+    }
+}

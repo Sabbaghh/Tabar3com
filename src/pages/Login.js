@@ -2,20 +2,15 @@ import React from 'react'
 import Container from '@material-ui/core/Container'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
-import { useForm } from 'react-hook-form'
 import Button from '@material-ui/core/Button'
 import { Link } from 'react-router-dom'
 import Logo from '../images/tabar3kom.png'
 import '../styles/form.scss'
 
 const Login = () => {
-	const { register, handleSubmit } = useForm()
-	const onLogin = (data) => {
-		console.log(data)
-	}
 	return (
 		<Container fixed className='Form-container'>
-			<form onSubmit={handleSubmit(onLogin)}>
+			<form>
 				<Grid container direction='column' justify='center' alignItems='center'>
 					<Container className='logo-container'>
 						<img src={Logo} alt='LOGO' />
@@ -28,9 +23,7 @@ const Login = () => {
 						variant='filled'
 						type='email'
 						name='email'
-						inputRef={register}
 						color='primary'
-						autoComplete
 						required
 					/>
 					<TextField
@@ -41,7 +34,6 @@ const Login = () => {
 						variant='filled'
 						type='Password'
 						name='Password'
-						inputRef={register}
 						color='primary'
 						required
 					/>
@@ -52,7 +44,7 @@ const Login = () => {
 						color='primary'
 						type='submit'
 					>
-						register
+						Login
 					</Button>
 					<span>
 						DON'T HAVE AN ACCOUNT ? <Link to='/Register'>REGISTER</Link>

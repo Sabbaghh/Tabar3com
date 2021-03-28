@@ -1,74 +1,103 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '@material-ui/core/Container'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
-import { useForm } from 'react-hook-form'
 import Button from '@material-ui/core/Button'
+import PhoneInput from 'react-phone-number-input'
 import { Link } from 'react-router-dom'
 import Logo from '../images/tabar3kom.png'
 import MenuItem from '@material-ui/core/MenuItem'
+import 'react-phone-number-input/style.css'
 import '../styles/form.scss'
 
 const Register = () => {
-	const { register, handleSubmit } = useForm()
-	const onLogin = (data) => {
-		console.log(data)
+	const [firstName, setFirstName] = useState('')
+	const [firstNameErr, setFirstNameErr] = useState(true)
+	const [lastName, setLastName] = useState('')
+	const [lastNameErr, setLastNameErr] = useState(true)
+	const [password, setPassword] = useState('')
+	const [passwordErr, setPassswordErr] = useState(true)
+	const [email, setEmail] = useState('')
+	const [emailErr, setEmailErr] = useState(true)
+	const [phoneNumber, setPhoneNumber] = useState('')
+	const [gender, setGender] = useState('')
+	const passowrdExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/
+	const emailRgx = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+	const onPasswordChange = (e) => {
+		setPassword(e.target.value)
+		e.target.value.match(passowrdExp)
+			? setPassswordErr(true)
+			: setPassswordErr(false)
+	}
+	const onEmailChange = (e) => {
+		setEmail(e.target.value)
+		e.target.value.match(emailRgx) ? setEmailErr(true) : setEmailErr(false)
+	}
+	const onGenderChange = (e) => {
+		setGender(e.target.value)
+	}
+	const onFirstNameChange = (e) => {
+		setFirstName(e.target.value)
+		e.target.value.length > 2 ? setFirstNameErr(true) : setFirstNameErr(false)
+	}
+	const onLastNameChange = (e) => {
+		setLastName(e.target.value)
+		e.target.value.length > 2 ? setLastNameErr(true) : setLastNameErr(false)
 	}
 	return (
 		<Container fixed className='Form-container'>
-			<form onSubmit={handleSubmit(onLogin)}>
+			<form>
 				<Grid container direction='column' justify='center' alignItems='center'>
 					<Container className='logo-container'>
-						<img src={Logo} />
+						<img src={Logo} alt='logo' />
 					</Container>
 					<TextField
 						className='input'
-						id='filled-basic'
 						label='Name'
 						placeholder='John'
 						variant='filled'
 						type='text'
 						name='name'
-						inputRef={register}
-						color='primary'
+						color={firstNameErr ? 'primary' : 'secondary'}
 						required
+						onChange={onFirstNameChange}
+						value={firstName}
 					/>
 					<TextField
 						className='input'
-						id='filled-basic'
 						label='Last Name'
 						placeholder='Doe'
 						variant='filled'
 						type='text'
 						name='LastName'
-						inputRef={register}
-						color='primary'
+						color={lastNameErr ? 'primary' : 'secondary'}
 						required
+						onChange={onLastNameChange}
+						value={lastName}
 					/>
 					<TextField
 						className='input'
-						id='filled-basic'
 						label='Email'
 						placeholder='exmaple@example.com'
 						variant='filled'
 						type='email'
 						name='email'
-						inputRef={register}
-						color='primary'
-						autoComplete
 						required
+						value={email}
+						color={emailErr ? 'primary' : 'secondary'}
+						onChange={onEmailChange}
 					/>
 					<TextField
 						className='input'
-						id='filled-basic'
 						label='Password'
 						placeholder='********'
 						variant='filled'
 						type='Password'
 						name='Password'
-						inputRef={register}
-						color='primary'
+						color={passwordErr ? 'primary' : 'secondary'}
 						required
+						onChange={onPasswordChange}
+						value={password}
 					/>
 					<TextField
 						id='date'
@@ -80,32 +109,22 @@ const Register = () => {
 						InputLabelProps={{
 							shrink: true,
 						}}
-						inputRef={register}
 						required
 					/>
-					<TextField
-						className='input'
-						id='filled-basic'
-						label='Phone number'
-						placeholder='07xxxxxxxxx'
-						variant='filled'
-						type='tel'
-						name='phone'
-						inputRef={register}
-						color='primary'
-						required
+					<PhoneInput
+						placeholder='Enter phone number'
+						value={phoneNumber}
+						onChange={setPhoneNumber}
+						className='input phone-input'
 					/>
 					<TextField
-						id='select'
 						label='Gender'
-						value='Male'
+						value={gender}
 						select
 						className='input'
 						variant='filled'
+						onChange={onGenderChange}
 					>
-						<MenuItem value='Select' disabled selected>
-							Select
-						</MenuItem>
 						<MenuItem value='Male'>Male</MenuItem>
 						<MenuItem value='Female'>Female</MenuItem>
 					</TextField>
