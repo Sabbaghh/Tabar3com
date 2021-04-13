@@ -12,13 +12,13 @@ import '../styles/form.scss'
 
 const Register = () => {
 	const [firstName, setFirstName] = useState('')
-	const [firstNameErr, setFirstNameErr] = useState(true)
+	const [firstNameErr, setFirstNameErr] = useState(false)
 	const [lastName, setLastName] = useState('')
-	const [lastNameErr, setLastNameErr] = useState(true)
+	const [lastNameErr, setLastNameErr] = useState(false)
 	const [password, setPassword] = useState('')
-	const [passwordErr, setPassswordErr] = useState(true)
+	const [passwordErr, setPassswordErr] = useState(false)
 	const [email, setEmail] = useState('')
-	const [emailErr, setEmailErr] = useState(true)
+	const [emailErr, setEmailErr] = useState(false)
 	const [phoneNumber, setPhoneNumber] = useState('')
 	const [gender, setGender] = useState('')
 	const passowrdExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/

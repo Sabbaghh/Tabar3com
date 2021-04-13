@@ -32,7 +32,8 @@ const NavBar = () => {
 				</NavLink>
 			</Grid>
 			<Container className='logo-container-nav'>
-				<img src={Logo} alt='LOGO' />
+				{/* <img src={Logo} alt='LOGO' /> */}
+				<span>ZAKATNA | زكاتنا</span>
 			</Container>
 		</>
 	)
