@@ -1,0 +1,45 @@
+.Calculator{
+    display :flex;
+    flex-direction:column;
+    justify-content : center;
+    align-items : center;
+    height:100vh;
+    .btn{
+        width: 50%;
+        margin: 2rem;
+    }
+    .goldPrices{
+        width:40% !important;
+        font-size: 16px;
+        span{
+            display:block;
+            direction:rtl;
+        }
+    }
+    .OutterContainer{
+        height:80vh;
+        div{
+            margin-top:1rem;
+        }
+        .input{
+            width: 25% !important;
+            direction: rtl !important;
+            text-align: center;
+            font-size: 20px !important;
+        }
+        .label{
+            width: 25% !important;
+            text-align: center;
+            font-size: 30px !important;
+        }
+    }
+}
+
+.GoldCal{
+    display: flex;
+    flex-direction:column;
+    .goldCalinput{
+        display: flex;
+        flex-direction:row;
+    }
+}
