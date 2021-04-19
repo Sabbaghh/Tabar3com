@@ -49,7 +49,9 @@ const Register = () => {
 			<form>
 				<Grid container direction='column' justify='center' alignItems='center'>
 					<Container className='logo-container'>
-						<img src={Logo} alt='logo' />
+						<p style={{ color: '#FFF', textAlign: 'center' }}>
+							ZAKATNA | زكاتنا
+						</p>
 					</Container>
 					<TextField
 						className='input'
