@@ -120,7 +120,7 @@ const Calculator = () => {
 								className='input'
 								onChange={(e) => setCash(e.target.value)}
 							/>
-							<InputLabel className='label'>المبلغ</InputLabel>
+							<InputLabel className='label'>(دينار أردني) المبلغ</InputLabel>
 						</Grid>
 						<p>
 							<a
@@ -215,15 +215,6 @@ const Calculator = () => {
 								سعر ذهب(غ) 18 اليوم : {gold18} دينار أردني
 							</span>
 						</div>
-						<p>
-							<a
-								href='https://www.fxnewstoday.ae/rates/%D8%AA%D8%AD%D9%88%D9%8A%D9%84-%D8%B9%D9%85%D9%84%D8%A7%D8%AA'
-								target='_blank'
-								rel='noopener noreferrer'
-							>
-								لتحويل العملات اضغط هنا
-							</a>
-						</p>
 						<Button
 							className='btn gold'
 							variant='contained'
