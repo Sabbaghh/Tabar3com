@@ -1,12 +1,32 @@
 .Calculator{
     display :flex;
-    flex-direction:column;
+    flex-direction:row;
     justify-content : center;
     align-items : center;
-    height:100vh;
+    height:80vh;
+    .imagecontainer{
+        color: red;
+        width: 60rem;
+        height:100%;
+        display: flex;
+        justify-content:center;
+        align-items:center;
+        .img{
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            img{
+                width: 90%;
+            }
+        }
+    }
     .btn{
         width: 50%;
-        margin: 2rem;
+        margin: 1rem;
+        display: block;
+    }
+    .btn.gold{
+        // margin-bottom: 5%;
     }
     .goldPrices{
         width:40% !important;
@@ -17,7 +37,9 @@
         }
     }
     .OutterContainer{
-        height:80vh;
+        flex-wrap: nowrap !important;
+        height:100%;
+        margin-top:20%;
         div{
             margin-top:1rem;
         }
@@ -30,7 +52,7 @@
         .label{
             width: 25% !important;
             text-align: center;
-            font-size: 30px !important;
+            font-size: 20px !important;
         }
     }
 }

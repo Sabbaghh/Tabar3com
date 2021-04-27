@@ -8,6 +8,7 @@ import {
 	Button,
 } from '@material-ui/core'
 import { requestOptions } from '../API/GoldApi'
+import zakatImage from '../images/zakat.jpg'
 import '../styles/Calculator.scss'
 
 const Calculator = () => {
@@ -60,26 +61,31 @@ const Calculator = () => {
 				SetTotal(`مقدار الزكاة: ${cash / 40}د.أ`)
 				break
 			default:
-				let total24 = parseInt(gold24Input) * gold24
-				let total22 = parseInt(gold22Input) * gold22
-				let total21 = parseInt(gold21Input) * gold21
-				let total18 = parseInt(gold18Input) * gold18
+				let total24 = parseInt(gold24Input)
+				let total22 = (parseInt(gold22Input) * 22) / 24
+				let total21 = (parseInt(gold21Input) * 21) / 24
+				let total18 = (parseInt(gold18Input) * 18) / 24
 				let total = total24 + total22 + total21 + total18
 				console.log(total)
-				if (parseInt(total) < 3372.8) {
-					SetTotal(`المبلغ المدخل لم يبلغ النصاب ,النصاب =3372.8دينار اردني`)
+				if (parseInt(total) < 85) {
+					SetTotal(`عدد الغرامات لا تبلغ حد النصاب`)
 					break
 				} else if (isNaN(total)) {
 					SetTotal('Please enter a valid amount number amountd')
 					break
 				} else {
-					SetTotal(`مقدار الزكاة: ${total / 40}د.أ`)
+					SetTotal(`مقدار الزكاة: ${(total * gold24) / 40}د.أ`)
 					break
 				}
 		}
 	}
 	return (
 		<section className='Calculator'>
+			<div className='imagecontainer'>
+				<div className='img'>
+					<img src={zakatImage} alt='zakatImage'></img>
+				</div>
+			</div>
 			<Grid
 				container
 				direction='column'
@@ -102,14 +108,41 @@ const Calculator = () => {
 					<InputLabel className='label'>زكاة</InputLabel>
 				</Grid>
 				{Toggle === 'نقداً' ? (
-					<Grid container direction='row' justify='center' alignItems='center'>
-						<TextField
+					<>
+						<Grid
+							container
+							direction='row'
+							justify='center'
+							alignItems='center'
+						>
+							<TextField
+								color='primary'
+								className='input'
+								onChange={(e) => setCash(e.target.value)}
+							/>
+							<InputLabel className='label'>المبلغ</InputLabel>
+						</Grid>
+						<p>
+							<a
+								href='https://www.fxnewstoday.ae/rates/%D8%AA%D8%AD%D9%88%D9%8A%D9%84-%D8%B9%D9%85%D9%84%D8%A7%D8%AA'
+								target='_blank'
+								rel='noopener noreferrer nofollow'
+							>
+								لتحويل العملات اضغط هنا
+							</a>
+						</p>
+						<Button
+							className='btn'
+							variant='contained'
 							color='primary'
-							className='input'
-							onChange={(e) => setCash(e.target.value)}
-						/>
-						<InputLabel className='label'>المبلغ</InputLabel>
-					</Grid>
+							size='large'
+							type='button'
+							onClick={() => OnCalculate()}
+						>
+							أحسب
+						</Button>
+						<h1 className='total'>{Total}</h1>
+					</>
 				) : (
 					<>
 						<Grid
@@ -124,7 +157,7 @@ const Calculator = () => {
 								onChange={(e) => setgold24Input(e.target.value)}
 								value={gold24Input}
 							/>
-							<InputLabel className='label'>ذهب عيار 24</InputLabel>
+							<InputLabel className='label'>(غ) ذهب عيار 24</InputLabel>
 						</Grid>
 						<Grid
 							container
@@ -138,7 +171,7 @@ const Calculator = () => {
 								onChange={(e) => setgold22Input(e.target.value)}
 								value={gold22Input}
 							/>
-							<InputLabel className='label'>ذهب عيار 22</InputLabel>
+							<InputLabel className='label'> (غ)ذهب عيار 22 </InputLabel>
 						</Grid>
 						<Grid
 							container
@@ -152,7 +185,7 @@ const Calculator = () => {
 								onChange={(e) => setgold21Input(e.target.value)}
 								value={gold21Input}
 							/>
-							<InputLabel className='label'>ذهب عيار 21</InputLabel>
+							<InputLabel className='label'>ذهب عيار 21 (غ)</InputLabel>
 						</Grid>
 						<Grid
 							container
@@ -166,37 +199,45 @@ const Calculator = () => {
 								onChange={(e) => setgold18Input(e.target.value)}
 								value={gold18Input}
 							/>
-							<InputLabel className='label'>ذهب عيار 18</InputLabel>
+							<InputLabel className='label'>(غ) ذهب عيار 18</InputLabel>
 						</Grid>
+						<div className='goldPrices'>
+							<span className='labelGold'>
+								سعر ذهب(غ) 24 اليوم : {gold24} دينار أردني
+							</span>
+							<span className='labelGold'>
+								سعر ذهب(غ) 22 اليوم : {gold22} دينار أردني
+							</span>
+							<span className='labelGold'>
+								سعر ذهب(غ) 21 اليوم : {gold21} دينار أردني
+							</span>
+							<span className='labelGold'>
+								سعر ذهب(غ) 18 اليوم : {gold18} دينار أردني
+							</span>
+						</div>
+						<p>
+							<a
+								href='https://www.fxnewstoday.ae/rates/%D8%AA%D8%AD%D9%88%D9%8A%D9%84-%D8%B9%D9%85%D9%84%D8%A7%D8%AA'
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								لتحويل العملات اضغط هنا
+							</a>
+						</p>
+						<Button
+							className='btn gold'
+							variant='contained'
+							color='primary'
+							size='large'
+							type='button'
+							onClick={() => OnCalculate()}
+						>
+							أحسب
+						</Button>
+						<h1 className='total'>{Total}</h1>
 					</>
 				)}
-
-				<div className='goldPrices'>
-					<span className='labelGold'>
-						سعر ذهب 24 اليوم : {gold24} دينار أردني
-					</span>
-					<span className='labelGold'>
-						سعر ذهب 22 اليوم : {gold22} دينار أردني
-					</span>
-					<span className='labelGold'>
-						سعر ذهب 21 اليوم : {gold21} دينار أردني
-					</span>
-					<span className='labelGold'>
-						سعر ذهب 18 اليوم : {gold18} دينار أردني
-					</span>
-				</div>
 			</Grid>
-			<Button
-				className='btn'
-				variant='contained'
-				color='primary'
-				size='large'
-				type='button'
-				onClick={() => OnCalculate()}
-			>
-				أحسب
-			</Button>
-			<h1>{Total}</h1>
 		</section>
 	)
 }
