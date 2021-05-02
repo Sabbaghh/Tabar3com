@@ -5,6 +5,7 @@
     display: flex !important;
     justify-content:center;
     align-items:center;
+    width: 10% !important;
     form{
         border: 1px solid gray;
         padding: 2rem;
@@ -12,6 +13,23 @@
         width:20rem;
         margin-top: 0.5rem;
     }  
+    }
+    
+}
+.phoneNumberContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    p{
+        text-align: end !important;
+        height: 3em;
+        width: 15%;
+        display:flex;
+        justify-content: end;
+        align-items: flex-end;
+        font-weight: bold;
+        font-size: 16px;
     }
     
 }

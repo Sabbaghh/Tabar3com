@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react'
 import Container from '@material-ui/core/Container'
 import TextField from '@material-ui/core/TextField'
+import { KeyboardDatePicker } from '@material-ui/pickers'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
-import PhoneInput from 'react-phone-number-input'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../API/authContext'
 import { useHistory } from 'react-router-dom'
 import { ProjectFireStore } from '../API/FireBase'
+import dayjs from 'dayjs'
 // import Logo from '../images/tabar3kom.png'
 import MenuItem from '@material-ui/core/MenuItem'
 import 'react-phone-number-input/style.css'
@@ -25,7 +26,7 @@ const Register = () => {
 	const [emailErr, setEmailErr] = useState(false)
 	const [phoneNumber, setPhoneNumber] = useState('')
 	const [gender, setGender] = useState('')
-	const [date, setDate] = useState()
+	const [date, setDate] = useState(new Date())
 	const passowrdExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/
 	const emailRgx = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 	const [error, setError] = useState('')
@@ -53,8 +54,27 @@ const Register = () => {
 		setLastName(e.target.value)
 		e.target.value.length > 2 ? setLastNameErr(true) : setLastNameErr(false)
 	}
+	const onPhoneNumberCahnge = (e) => {
+		const numbers = [' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+		if (
+			numbers.includes(e.target.value[e.target.value.length - 1]) &&
+			e.target.value.length < 10
+		) {
+			setPhoneNumber(e.target.value)
+		}
+		if (e.target.value === '') {
+			setPhoneNumber('')
+		}
+	}
+	const onDateChange = (date) => {
+		setDate(date)
+	}
 	const onSignUp = async (e) => {
 		e.preventDefault()
+		if (new Date().getFullYear() - date.getFullYear() < 18) {
+			alert('You must be at least 18 years old')
+			return
+		}
 		try {
 			setError('')
 			setLoading('Loading..')
@@ -107,6 +127,50 @@ const Register = () => {
 						value={lastName}
 					/>
 					<TextField
+						label='Gender'
+						value={gender}
+						select
+						className='input'
+						variant='filled'
+						onChange={onGenderChange}
+						required
+					>
+						<MenuItem value='Male'>Male</MenuItem>
+						<MenuItem value='Female'>Female</MenuItem>
+					</TextField>
+					<KeyboardDatePicker
+						margin='normal'
+						className='input'
+						label='Birth date'
+						format='MM/dd/yyyy'
+						value={date}
+						onChange={onDateChange}
+						KeyboardButtonProps={{
+							'aria-label': 'change date',
+						}}
+					/>
+					<span
+						style={{ paddingTop: '0.5rem', width: '90%', color: '#7d7c83' }}
+					>
+						Phone Number
+					</span>
+					<div className='phoneNumberContainer'>
+						<p>+962</p>
+						<TextField
+							className='input'
+							variant='filled'
+							value={phoneNumber}
+							label='phone number'
+							placeholder='xxxxxxxxx'
+							onChange={(e) => {
+								onPhoneNumberCahnge(e)
+							}}
+							color={phoneNumber.length === 9 ? 'primary' : 'secondary'}
+							required
+						/>
+					</div>
+
+					<TextField
 						className='input'
 						label='Email'
 						placeholder='exmaple@example.com'
@@ -130,37 +194,12 @@ const Register = () => {
 						onChange={onPasswordChange}
 						value={password}
 					/>
-					<TextField
-						id='date'
-						label='Birth date'
-						type='date'
-						name='date'
-						className='input'
-						variant='filled'
-						value={date}
-						onChange={(e) => setDate(e.target.value)}
-						InputLabelProps={{
-							shrink: true,
-						}}
-						required
-					/>
-					<PhoneInput
-						placeholder='Enter phone number'
-						value={phoneNumber}
-						onChange={setPhoneNumber}
-						className='input phone-input'
-					/>
-					<TextField
-						label='Gender'
-						value={gender}
-						select
-						className='input'
-						variant='filled'
-						onChange={onGenderChange}
+					<span
+						style={{ paddingTop: '0.5rem', width: '90%', color: '#7d7c83' }}
 					>
-						<MenuItem value='Male'>Male</MenuItem>
-						<MenuItem value='Female'>Female</MenuItem>
-					</TextField>
+						Password must be 8-16 characters long and contain both numbers and
+						letters/special characters
+					</span>
 					<Button
 						className='input'
 						size='large'
