@@ -17,6 +17,8 @@ const Login = () => {
 	const history = useHistory()
 
 	const login = useContext(AuthContext).login
+	const currentUser = useContext(AuthContext).currentUser
+	console.log(currentUser)
 	// const setCurrentUser = useContext(AuthContext).setCurrentUser
 
 	const handleLoginSubmit = async (e) => {

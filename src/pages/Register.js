@@ -7,6 +7,7 @@ import PhoneInput from 'react-phone-number-input'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../API/authContext'
 import { useHistory } from 'react-router-dom'
+import { ProjectFireStore } from '../API/FireBase'
 // import Logo from '../images/tabar3kom.png'
 import MenuItem from '@material-ui/core/MenuItem'
 import 'react-phone-number-input/style.css'
@@ -24,6 +25,7 @@ const Register = () => {
 	const [emailErr, setEmailErr] = useState(false)
 	const [phoneNumber, setPhoneNumber] = useState('')
 	const [gender, setGender] = useState('')
+	const [date, setDate] = useState()
 	const passowrdExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/
 	const emailRgx = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 	const [error, setError] = useState('')
@@ -57,6 +59,14 @@ const Register = () => {
 			setError('')
 			setLoading('Loading..')
 			await signup(email, password)
+			ProjectFireStore.collection('users').doc(email).set({
+				firstName,
+				lastName,
+				email,
+				date,
+				gender,
+				phoneNumber,
+			})
 			history.push('/profile')
 		} catch {
 			setError('something went wrong! please try again..')
@@ -127,6 +137,8 @@ const Register = () => {
 						name='date'
 						className='input'
 						variant='filled'
+						value={date}
+						onChange={(e) => setDate(e.target.value)}
 						InputLabelProps={{
 							shrink: true,
 						}}

@@ -4,13 +4,18 @@ import { AuthContext } from './authContext'
 
 const MainAdminPrivateRoute = ({ component: Component, ...rest }) => {
 	const currentUser = useContext(AuthContext).currentUser
+	console.log(currentUser)
 	return (
-		<Route
-			{...rest}
-			render={(props) => {
-				return currentUser ? <Component {...props} /> : <Redirect to='/' />
-			}}
-		></Route>
+		<>
+			{currentUser && (
+				<Route
+					{...rest}
+					render={(props) => {
+						return currentUser ? <Component {...props} /> : <Redirect to='/' />
+					}}
+				/>
+			)}
+		</>
 	)
 }
 
