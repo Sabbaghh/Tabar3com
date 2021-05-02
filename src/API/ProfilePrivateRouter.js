@@ -2,9 +2,8 @@ import React, { useContext } from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { AuthContext } from './authContext'
 
-const MainAdminPrivateRoute = ({ component: Component, ...rest }) => {
+const ProfilePrivateRouter = ({ component: Component, ...rest }) => {
 	const currentUser = useContext(AuthContext).currentUser
-	console.log(currentUser)
 	return (
 		<>
 			{currentUser && (
@@ -19,4 +18,4 @@ const MainAdminPrivateRoute = ({ component: Component, ...rest }) => {
 	)
 }
 
-export default MainAdminPrivateRoute
+export default ProfilePrivateRouter

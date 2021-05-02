@@ -19,7 +19,6 @@ const Login = () => {
 	const login = useContext(AuthContext).login
 	const currentUser = useContext(AuthContext).currentUser
 	console.log(currentUser)
-	// const setCurrentUser = useContext(AuthContext).setCurrentUser
 
 	const handleLoginSubmit = async (e) => {
 		e.preventDefault()
@@ -27,9 +26,8 @@ const Login = () => {
 			setError('')
 			setLoading('Loading..')
 			await login(email, password)
-			history.push('/profile')
+			history.push('/')
 		} catch {
-			//if you can't find email for main admin look for secondary admins
 			setError('something went wrong! please try again..')
 		}
 		setLoading(false)

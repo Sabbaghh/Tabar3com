@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { NavLink } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
-import Logo from '../images/tabar3kom.png'
+import { AuthContext } from '../API/authContext'
+import { Button } from '@material-ui/core'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+// import Logo from '../images/tabar3kom.png'
+
 import '../styles/navbar.scss'
 
 const NavBar = () => {
+	const currentUser = useContext(AuthContext).currentUser
+	const logout = useContext(AuthContext).logout
 	return (
 		<>
 			<Grid
@@ -27,9 +33,25 @@ const NavBar = () => {
 				<NavLink exact to='/calculator' activeClassName='nav-active'>
 					حساب الزكاة
 				</NavLink>
-				<NavLink to='/login' activeClassName='nav-active'>
-					تسجيل دخول
-				</NavLink>
+				{currentUser ? (
+					<>
+						<Button
+							variant='contained'
+							color='primary'
+							size='large'
+							onClick={() => logout()}
+						>
+							تسجيل خروج
+						</Button>
+						<NavLink to='/profile' activeClassName='nav-active'>
+							<AccountCircleIcon />
+						</NavLink>
+					</>
+				) : (
+					<NavLink to='/login' activeClassName='nav-active'>
+						تسجيل دخول
+					</NavLink>
+				)}
 			</Grid>
 			<Container className='logo-container-nav'>
 				{/* <img src={Logo} alt='LOGO' /> */}
