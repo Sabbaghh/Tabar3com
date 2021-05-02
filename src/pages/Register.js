@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Container from '@material-ui/core/Container'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import PhoneInput from 'react-phone-number-input'
 import { Link } from 'react-router-dom'
-import Logo from '../images/tabar3kom.png'
+import { AuthContext } from '../API/authContext'
+import { useHistory } from 'react-router-dom'
+// import Logo from '../images/tabar3kom.png'
 import MenuItem from '@material-ui/core/MenuItem'
 import 'react-phone-number-input/style.css'
 import '../styles/form.scss'
 
 const Register = () => {
+	const signup = useContext(AuthContext).signup
 	const [firstName, setFirstName] = useState('')
 	const [firstNameErr, setFirstNameErr] = useState(false)
 	const [lastName, setLastName] = useState('')
@@ -23,6 +26,10 @@ const Register = () => {
 	const [gender, setGender] = useState('')
 	const passowrdExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/
 	const emailRgx = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+	const [error, setError] = useState('')
+	const [loading, setLoading] = useState('')
+	const history = useHistory()
+
 	const onPasswordChange = (e) => {
 		setPassword(e.target.value)
 		e.target.value.match(passowrdExp)
@@ -44,9 +51,21 @@ const Register = () => {
 		setLastName(e.target.value)
 		e.target.value.length > 2 ? setLastNameErr(true) : setLastNameErr(false)
 	}
+	const onSignUp = async (e) => {
+		e.preventDefault()
+		try {
+			setError('')
+			setLoading('Loading..')
+			await signup(email, password)
+			history.push('/profile')
+		} catch {
+			setError('something went wrong! please try again..')
+		}
+		setLoading(false)
+	}
 	return (
 		<Container fixed className='Form-container'>
-			<form>
+			<form onSubmit={(e) => onSignUp(e)}>
 				<Grid container direction='column' justify='center' alignItems='center'>
 					<Container className='logo-container'>
 						<p style={{ color: '#FFF', textAlign: 'center' }}>
@@ -142,6 +161,8 @@ const Register = () => {
 					<span>
 						DO YOU HAVE AN ACCOUNT ? <Link to='/Login'>LOG IN</Link>
 					</span>
+					{error && <span style={{ color: 'red' }}>{error}</span>}
+					{loading && <span style={{ color: 'blue' }}>{loading}</span>}
 				</Grid>
 			</form>
 		</Container>
