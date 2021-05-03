@@ -21,12 +21,15 @@ function App() {
 							<Route path='/' exact component={Home} />
 							<Route path='/Charities' component={Charities} />
 							<Route path='/Calculator' component={Calculator} />
+
 							<ProfilePrivateRouter
 								example
 								path='/profile'
 								component={Profile}
 							/>
+
 							<LoginPrivateRouter example path='/Login' component={Login} />
+
 							<LoginPrivateRouter
 								example
 								path='/Register'

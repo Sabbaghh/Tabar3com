@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../API/authContext'
 import { useHistory } from 'react-router-dom'
 import { ProjectFireStore } from '../API/FireBase'
-import dayjs from 'dayjs'
 // import Logo from '../images/tabar3kom.png'
 import MenuItem from '@material-ui/core/MenuItem'
 import 'react-phone-number-input/style.css'
@@ -28,7 +27,7 @@ const Register = () => {
 	const [gender, setGender] = useState('')
 	const [date, setDate] = useState(new Date())
 	const passowrdExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/
-	const emailRgx = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+	const emailRgx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 	const [error, setError] = useState('')
 	const [loading, setLoading] = useState('')
 	const history = useHistory()
@@ -72,7 +71,15 @@ const Register = () => {
 	const onSignUp = async (e) => {
 		e.preventDefault()
 		if (new Date().getFullYear() - date.getFullYear() < 18) {
-			alert('You must be at least 18 years old')
+			setError('you must be at least 18 years old')
+			return
+		}
+		if (!passwordErr) {
+			setError('The password is weak')
+			return
+		}
+		if (!emailErr) {
+			setError('The email isnt valid')
 			return
 		}
 		try {
@@ -141,7 +148,7 @@ const Register = () => {
 					<KeyboardDatePicker
 						margin='normal'
 						className='input'
-						label='Birth date'
+						label='Birth date - MM/DD/YYYY'
 						format='MM/dd/yyyy'
 						value={date}
 						onChange={onDateChange}

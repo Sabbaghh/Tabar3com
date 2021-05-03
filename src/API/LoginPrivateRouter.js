@@ -6,14 +6,12 @@ const LoginPrivateRouter = ({ component: Component, ...rest }) => {
 	const currentUser = useContext(AuthContext).currentUser
 	return (
 		<>
-			(
 			<Route
 				{...rest}
 				render={(props) => {
 					return currentUser ? <Redirect to='/' /> : <Component {...props} />
 				}}
 			/>
-			)
 		</>
 	)
 }

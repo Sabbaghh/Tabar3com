@@ -1,0 +1,36 @@
+.profile-form{
+    width:80%;
+    padding-top:2rem !important;
+    padding-bottom:2rem !important;
+    border:1px solid black;
+    border-radius: 0.5rem;
+    margin-top:2rem;
+    margin-bottom:2rem;
+    
+    .input-container{
+        margin-top:1rem;
+        .input{
+        width:50%;
+    }
+    }
+    .btn{
+        width: 5rem;
+        height:3.5rem;
+    }
+    .btn-wide{
+        width:50%;
+        height:3rem;
+        margin-bottom: 0.2rem;
+    }
+    .phone{
+        width:47% !important;
+    }
+    .donateNow{
+        background:red;
+        width:10rem !important;
+    }
+    .profile-header{
+        text-align: center;
+        font-weight: 300;
+    }
+}
