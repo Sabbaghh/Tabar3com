@@ -17,6 +17,16 @@ export const AuthProvider = ({ children }) => {
 	const logout = () => {
 		return auth.signOut()
 	}
+	const sendEmailVerification = () => {
+		return currentUser
+			.sendEmailVerification()
+			.then(() => {
+				console.log('sent')
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+	}
 
 	useEffect(() => {
 		const unSub = auth.onAuthStateChanged((user) => {
@@ -32,6 +42,7 @@ export const AuthProvider = ({ children }) => {
 		login,
 		resetPassword,
 		logout,
+		sendEmailVerification,
 	}
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
