@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
 	Grid,
 	InputLabel,
@@ -10,6 +10,8 @@ import {
 import { requestOptions } from '../API/GoldApi'
 import zakatImage from '../images/zakat.jpg'
 import '../styles/Calculator.scss'
+import { ProjectFireStore } from '../API/FireBase'
+import { AuthContext } from '../API/authContext'
 
 const Calculator = () => {
 	const [gold24, setGold24] = useState(0)
@@ -25,7 +27,27 @@ const Calculator = () => {
 	const [gold21Input, setgold21Input] = useState(0)
 	const [gold18Input, setgold18Input] = useState(0)
 
+	//error and loading
+	const [error, setError] = useState('')
+	const [loading, setLoading] = useState('')
+
+	//current user
+	const currentUser = useContext(AuthContext).currentUser
+	//fire store total amount of donations
+	const [userData, setUserData] = useState('')
+	const [donation, setDonation] = useState(0)
+	//total donation
 	const [Total, SetTotal] = useState('')
+
+	//adding the total donation to firebase
+	const setTotalDonation = () => {
+		console.log(donation)
+		console.log(Total)
+		ProjectFireStore.collection('users')
+			.doc(currentUser.email)
+			.set({ ...userData, donation: parseInt(donation) + parseInt(Total) })
+		SetTotal('')
+	}
 
 	const getGoldPrices = () => {
 		fetch('https://www.goldapi.io/api/XAU/USD', requestOptions)
@@ -42,23 +64,35 @@ const Calculator = () => {
 	useEffect(() => {
 		getGoldPrices()
 		SetTotal('')
-	}, [Toggle])
+		if (currentUser) {
+			ProjectFireStore.collection('users')
+				.doc(currentUser.email)
+				.onSnapshot((snap) => {
+					setUserData(snap.data())
+					if (snap.data().donation) setDonation(parseInt(snap.data().donation))
+				})
+		}
+	}, [Toggle, currentUser])
 	const handleChange = (event) => {
+		setError('')
+		setLoading('')
 		setToggle(event.target.value)
 	}
 
 	const OnCalculate = () => {
+		setError('')
+		setLoading('')
 		switch (Toggle) {
 			case 'نقداً':
 				if (isNaN(cash)) {
-					SetTotal('Please enter a valid amount number amountd')
+					setError('Please enter a valid amount number amountd')
 					break
 				}
 				if (parseInt(cash) < 3372.8) {
-					SetTotal(`المبلغ المدخل لم يبلغ النصاب ,النصاب =3372.8دينار اردني`)
+					setError(`المبلغ المدخل لم يبلغ النصاب ,النصاب =3372.8دينار اردني`)
 					break
 				}
-				SetTotal(`مقدار الزكاة: ${cash / 40}د.أ`)
+				SetTotal(cash / 40)
 				break
 			default:
 				let total24 = parseInt(gold24Input)
@@ -68,13 +102,13 @@ const Calculator = () => {
 				let total = total24 + total22 + total21 + total18
 				console.log(total)
 				if (parseInt(total) < 85) {
-					SetTotal(`عدد الغرامات لا تبلغ حد النصاب`)
+					setError(`عدد الغرامات لا تبلغ حد النصاب`)
 					break
 				} else if (isNaN(total)) {
-					SetTotal('Please enter a valid amount number amountd')
+					setError('Please enter a valid amount number amountd')
 					break
 				} else {
-					SetTotal(`مقدار الزكاة: ${(total * gold24) / 40}د.أ`)
+					SetTotal((total * gold24) / 40)
 					break
 				}
 		}
@@ -141,7 +175,31 @@ const Calculator = () => {
 						>
 							أحسب
 						</Button>
-						<h1 className='total'>{Total}</h1>
+						<h1 className='total'>
+							{Total && (
+								<>
+									<p>مقدار الزكاة بالدينار الأردني = {Total}</p>
+									{currentUser && (
+										<Button
+											className='btn'
+											variant='contained'
+											color='primary'
+											size='large'
+											type='button'
+											onClick={() => setTotalDonation()}
+										>
+											اضف
+										</Button>
+									)}
+								</>
+							)}
+						</h1>
+						{error && (
+							<span style={{ color: 'red', marginBottom: '2rem' }}>
+								{error}
+							</span>
+						)}
+						{loading && <span style={{ color: 'blue' }}>{loading}</span>}
 					</>
 				) : (
 					<>
@@ -225,7 +283,31 @@ const Calculator = () => {
 						>
 							أحسب
 						</Button>
-						<h1 className='total'>{Total}</h1>
+						<h1 className='total'>
+							{Total && (
+								<>
+									<p>مقدار الزكاة بالدينار الأردني = {Total}</p>
+									{currentUser && (
+										<Button
+											className='btn'
+											variant='contained'
+											color='primary'
+											size='large'
+											type='button'
+											onClick={() => setTotalDonation()}
+										>
+											اضف
+										</Button>
+									)}
+								</>
+							)}
+						</h1>
+						{error && (
+							<span style={{ color: 'red', marginBottom: '2rem' }}>
+								{error}
+							</span>
+						)}
+						{loading && <span style={{ color: 'blue' }}>{loading}</span>}
 					</>
 				)}
 			</Grid>

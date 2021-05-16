@@ -28,6 +28,8 @@ const Profile = () => {
 	const [InputDisabled, setInputDisabled] = useState(true)
 	//FireStoreData
 	const [FireStoreData, setFireStoreData] = useState([])
+	//donation value
+	const [donation, setDonation] = useState(0)
 	//currentUser
 	const currentUser = useContext(AuthContext).currentUser
 	//error and loading
@@ -117,11 +119,20 @@ const Profile = () => {
 			type: `${InputDisabled ? 'submit' : 'button'}`,
 		},
 		{
-			value: 'DELETE ACCOUNT',
+			value: 'RESET DONATION',
 			color: 'secondary',
-			disabled: false,
+			disabled: donation === 0 ? true : false,
 			onButtonClick: () => {
-				console.log('click')
+				try {
+					ProjectFireStore.collection('users')
+						.doc(currentUser.email)
+						.set({
+							...FireStoreData,
+							donation: 0,
+						})
+				} catch {
+					setError('something went wrong! please try again..')
+				}
 			},
 			type: 'button',
 		},
@@ -137,6 +148,11 @@ const Profile = () => {
 				setLastNameValue(snap.data().lastName)
 				setDateValue(new Date(snap.data().date.seconds * 1000))
 				setPhoneNumber(snap.data().phoneNumber)
+				if (snap.data().donation) {
+					setDonation(snap.data().donation)
+				} else {
+					setDonation(0)
+				}
 			})
 	}, [currentUser.email])
 	const onSaveChanges = async (e) => {
@@ -243,7 +259,7 @@ const Profile = () => {
 						className='input-container'
 					>
 						<p>
-							قيمة التبرع المستحقة : 300 دينار أردني
+							قيمة التبرع المستحقة : {donation} دينار أردني
 							<hr />
 						</p>
 					</Grid>
