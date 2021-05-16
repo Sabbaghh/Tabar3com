@@ -4,7 +4,8 @@ import { KeyboardDatePicker } from '@material-ui/pickers'
 import { ProjectFireStore } from '../API/FireBase'
 import { AuthContext } from '../API/authContext'
 import '../styles/Profile.scss'
-const emailRgx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+const emailRgx =
+	/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 const Profile = () => {
 	//email input
@@ -29,6 +30,9 @@ const Profile = () => {
 	const [FireStoreData, setFireStoreData] = useState([])
 	//currentUser
 	const currentUser = useContext(AuthContext).currentUser
+	//error and loading
+	const [error, setError] = useState('')
+	const [loading, setLoading] = useState('')
 	const onDateChange = (date) => {
 		setDateValue(date)
 	}
@@ -69,18 +73,18 @@ const Profile = () => {
 			},
 			control: LastNameControl,
 		},
-		{
-			type: 'Text',
-			label: 'Email Address',
-			value: EmailValue,
-			onchange: (e) => {
-				setEmailValue(e.target.value)
-				e.target.value.match(emailRgx)
-					? setEmailControl(true)
-					: setEmailControl(false)
-			},
-			control: EmailControl,
-		},
+		// {
+		// 	type: 'Text',
+		// 	label: 'Email Address',
+		// 	value: EmailValue,
+		// 	onchange: (e) => {
+		// 		setEmailValue(e.target.value)
+		// 		e.target.value.match(emailRgx)
+		// 			? setEmailControl(true)
+		// 			: setEmailControl(false)
+		// 	},
+		// 	control: EmailControl,
+		// },
 		// {
 		// 	type: 'Password',
 		// 	label: 'Password',
@@ -95,14 +99,14 @@ const Profile = () => {
 		// },
 	]
 	const buttons = [
-		{
-			value: 'Change password',
-			color: 'primary',
-			disabled: false,
-			onButtonClick: () => {
-				console.log('click')
-			},
-		},
+		// {
+		// 	value: 'Change password',
+		// 	color: 'primary',
+		// 	disabled: false,
+		// 	onButtonClick: () => {
+		// 		console.log('click')
+		// 	},
+		// },
 		{
 			value: `${InputDisabled ? 'edit profile information' : 'SAVE CHANGES'}`,
 			color: 'primary',
@@ -110,6 +114,7 @@ const Profile = () => {
 			onButtonClick: () => {
 				setInputDisabled((prev) => !prev)
 			},
+			type: `${InputDisabled ? 'submit' : 'button'}`,
 		},
 		{
 			value: 'DELETE ACCOUNT',
@@ -118,6 +123,7 @@ const Profile = () => {
 			onButtonClick: () => {
 				console.log('click')
 			},
+			type: 'button',
 		},
 	]
 	useEffect(() => {
@@ -133,6 +139,29 @@ const Profile = () => {
 				setPhoneNumber(snap.data().phoneNumber)
 			})
 	}, [currentUser.email])
+	const onSaveChanges = async (e) => {
+		e.preventDefault()
+		if (new Date().getFullYear() - DateValue.getFullYear() < 18) {
+			setError('you must be at least 18 years old')
+			return
+		}
+		try {
+			setError('')
+			setLoading('Loading..')
+			ProjectFireStore.collection('users')
+				.doc(currentUser.email)
+				.set({
+					...FireStoreData,
+					firstName: FirstNameValue,
+					lastName: LastNameValue,
+					date: DateValue,
+					phoneNumber,
+				})
+		} catch {
+			setError('something went wrong! please try again..')
+		}
+		setLoading(false)
+	}
 	return (
 		<Container>
 			<Grid
@@ -141,7 +170,7 @@ const Profile = () => {
 				justify='"space-between"'
 				alignItems='center'
 			>
-				<form className='profile-form'>
+				<form className='profile-form' onSubmit={(e) => onSaveChanges(e)}>
 					<h1 className='profile-header'>الصفحة الشحصية</h1>
 					{inputs.map(({ type, label, value, onchange, control }) => {
 						return (
@@ -225,12 +254,12 @@ const Profile = () => {
 						alignItems='center'
 						className='input-container'
 					>
-						{buttons.map(({ color, onButtonClick, value, disabled }) => {
+						{buttons.map(({ color, onButtonClick, value, disabled, type }) => {
 							return (
 								<Button
 									variant='contained'
 									color={color}
-									type='button'
+									type={type}
 									className='btn-wide'
 									onClick={() => onButtonClick()}
 									disabled={disabled}
@@ -239,6 +268,8 @@ const Profile = () => {
 								</Button>
 							)
 						})}
+						{error && <span style={{ color: 'red' }}>{error}</span>}
+						{loading && <span style={{ color: 'blue' }}>{loading}</span>}
 					</Grid>
 				</form>
 			</Grid>
