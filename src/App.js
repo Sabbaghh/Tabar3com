@@ -9,6 +9,7 @@ import { AuthProvider } from './API/authContext'
 import ProfilePrivateRouter from './API/ProfilePrivateRouter'
 import LoginPrivateRouter from './API/LoginPrivateRouter'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import Contact from './pages/Contact'
 import DateFnsUtils from '@date-io/date-fns'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 function App() {
@@ -21,6 +22,7 @@ function App() {
 							<Route path='/' exact component={Home} />
 							<Route path='/Charities' component={Charities} />
 							<Route path='/Calculator' component={Calculator} />
+							<Route path='/About' component={Contact} />
 
 							<ProfilePrivateRouter
 								example
