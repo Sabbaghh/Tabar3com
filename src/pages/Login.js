@@ -14,11 +14,12 @@ const Login = () => {
 	const [password, setPassword] = useState('')
 	const [error, setError] = useState('')
 	const [loading, setLoading] = useState('')
+	const [resetPassword, setResetPassword] = useState(true)
 	const history = useHistory()
 
 	const login = useContext(AuthContext).login
 	const currentUser = useContext(AuthContext).currentUser
-	console.log(currentUser)
+	const reset = useContext(AuthContext).resetPassword
 
 	const handleLoginSubmit = async (e) => {
 		e.preventDefault()
@@ -42,44 +43,95 @@ const Login = () => {
 							ZAKATNA | زكاتنا
 						</p>
 					</Container>
-					<TextField
-						className='input'
-						id='filled-basic'
-						label='Email'
-						placeholder='exmaple@example.com'
-						variant='filled'
-						type='email'
-						name='email'
-						color='primary'
-						required
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-					/>
-					<TextField
-						className='input'
-						id='filled-basic'
-						label='Password'
-						placeholder='********'
-						variant='filled'
-						type='Password'
-						name='Password'
-						color='primary'
-						required
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-					/>
-					<Button
-						className='input'
-						size='large'
-						variant='outlined'
-						color='primary'
-						type='submit'
-					>
-						Login
-					</Button>
+
+					{resetPassword ? (
+						<>
+							<TextField
+								className='input'
+								id='filled-basic'
+								label='Email'
+								placeholder='exmaple@example.com'
+								variant='filled'
+								type='email'
+								name='email'
+								color='primary'
+								required
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+							/>
+							<TextField
+								className='input'
+								id='filled-basic'
+								label='Password'
+								placeholder='********'
+								variant='filled'
+								type='Password'
+								name='Password'
+								color='primary'
+								required
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+							/>
+							<Button
+								className='input'
+								size='large'
+								variant='outlined'
+								color='primary'
+								type='submit'
+							>
+								Login
+							</Button>
+						</>
+					) : (
+						<>
+							<TextField
+								className='input'
+								id='filled-basic'
+								label='Email'
+								placeholder='exmaple@example.com'
+								variant='filled'
+								type='email'
+								name='email'
+								color='primary'
+								required
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+							/>
+							<Button
+								className='input'
+								size='large'
+								variant='outlined'
+								color='primary'
+								type='button'
+								onClick={() => {
+									reset(email)
+									setResetPassword(true)
+								}}
+							>
+								RESET PASSOWRD
+							</Button>
+						</>
+					)}
+
 					<span>
 						DON'T HAVE AN ACCOUNT ? <Link to='/Register'>REGISTER</Link>
 					</span>
+					{resetPassword ? (
+						<span
+							onClick={() => setResetPassword(false)}
+							style={{ color: 'blue', cursor: 'pointer' }}
+						>
+							RESET PASSWORD
+						</span>
+					) : (
+						<span
+							onClick={() => setResetPassword(true)}
+							style={{ color: 'blue', cursor: 'pointer' }}
+						>
+							LOGIN
+						</span>
+					)}
+
 					{error && <span style={{ color: 'red' }}>{error}</span>}
 					{loading && <span style={{ color: 'blue' }}>{loading}</span>}
 				</Grid>
