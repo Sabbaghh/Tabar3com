@@ -198,8 +198,13 @@ export default class PaymentForm extends React.Component {
 					<div className='donation-info'>
 						<h4>اسم الجمعية المراد التبرع لها : {this.props.currentName}</h4>
 						<h4>
-							قيمة التبرع المستحقة : {this.props.expectedDonation} دينار اردني
+							قيمة التبرع المستحقة :{' '}
+							{this.props.expectedDonation
+								? `${this.props.expectedDonation} 							دينار اردني
+`
+								: 'لا يوجد'}{' '}
 						</h4>
+
 						<span class='label'>القيمة التي ترغب بالتبرع بها</span>
 						<input
 							type='number'
