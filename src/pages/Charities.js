@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
 	Grid,
 	Card,
@@ -12,7 +12,10 @@ import {
 	Backdrop,
 } from '@material-ui/core'
 import { ProjectFireStore } from '../API/FireBase'
+import PaymentForm from '../components/PaymentForm'
+import { AuthContext } from '../API/authContext'
 import '../styles/Charities.scss'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles({
 	root: {
@@ -32,14 +35,40 @@ const useStyles = makeStyles({
 		width: '80%',
 		height: '80%',
 	},
+	paymentFormContainer: {
+		width: '90%',
+		height: '100%',
+		background: '#FFF',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		overflowY: 'scroll',
+	},
 })
 const Charities = () => {
 	const [charities, setCharities] = useState([])
+	const [togglePayment, setTogglePayment] = useState(false)
+	const [expectedDonation, setExpectedDonation] = useState(0)
+	const currentUser = useContext(AuthContext).currentUser
 	useEffect(async () => {
 		const data = await getData()
+		if (currentUser) {
+			getExpectedDonation(currentUser.email)
+		}
 		setCharities(data)
 	}, [])
 
+	const getExpectedDonation = async (email) => {
+		try {
+			await ProjectFireStore.collection('users')
+				.doc(email)
+				.onSnapshot((res) => {
+					setExpectedDonation(res.data().donation)
+				})
+		} catch (error) {
+			console.log(error)
+		}
+	}
 	const getData = async () => {
 		const snapshot = await ProjectFireStore.collection('charities').get()
 		return snapshot.docs.map((doc) => doc.data())
@@ -94,32 +123,53 @@ const Charities = () => {
 					})}
 			</Grid>
 			{currentData && (
-				<Backdrop
-					className={classes.backdrop}
-					open={toggleBackDrop}
-					onClick={() => setToggleBackDrop(false)}
-				>
-					<div className='currentDataContainer'>
-						<div className='currentDataImageContainer'>
-							<img src={currentData.image} alt='logo' />
+				<>
+					<Backdrop
+						className={classes.backdrop}
+						open={toggleBackDrop}
+						onClick={() => setToggleBackDrop(false)}
+					>
+						<div className='currentDataContainer'>
+							<div className='currentDataImageContainer'>
+								<img src={currentData.image} alt='logo' />
+							</div>
+							<div className='currentDataDecContianer'>
+								<h1> {currentData.name}</h1>
+								<p>{currentData.description}</p>
+
+								<Button
+									type='button'
+									variant='outlined'
+									color='primary'
+									size='large'
+									onClick={() => {
+										setTogglePayment((prev) => !prev)
+									}}
+									disabled={currentUser ? false : true}
+								>
+									تبرع الان
+								</Button>
+								{!currentUser && (
+									<p style={{ textAlign: 'center' }}>
+										الرجاء <Link to='/login'>تسجيل الدخول</Link> للتبرع
+									</p>
+								)}
+							</div>
 						</div>
-						<div className='currentDataDecContianer'>
-							<h1> {currentData.name}</h1>
-							<p>{currentData.description}</p>
-							<Button
-								type='button'
-								variant='outlined'
-								color='primary'
-								size='large'
-								onClick={() => {
-									alert('test')
-								}}
-							>
-								تبرع الان
-							</Button>
-						</div>
-					</div>
-				</Backdrop>
+					</Backdrop>
+					{currentUser && (
+						<Backdrop className={classes.backdrop} open={togglePayment}>
+							<div className={classes.paymentFormContainer}>
+								<PaymentForm
+									currentName={currentData.name}
+									currentUserEmail={currentUser.email}
+									setTogglePayment={setTogglePayment}
+									expectedDonation={expectedDonation}
+								/>
+							</div>
+						</Backdrop>
+					)}
+				</>
 			)}
 		</>
 	)
