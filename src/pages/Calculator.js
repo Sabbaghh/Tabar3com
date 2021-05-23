@@ -40,12 +40,27 @@ const Calculator = () => {
 	const [Total, SetTotal] = useState('')
 
 	//adding the total donation to firebase
-	const setTotalDonation = () => {
-		console.log(donation)
-		console.log(Total)
-		ProjectFireStore.collection('users')
-			.doc(currentUser.email)
-			.set({ ...userData, donation: parseInt(donation) + parseInt(Total) })
+	const setTotalDonation = (type) => {
+		switch (type) {
+			case 'gold':
+				ProjectFireStore.collection('users')
+					.doc(currentUser.email)
+					.set({
+						...userData,
+						donationGold: parseInt(donation) + parseInt(Total),
+					})
+				break
+			case 'money':
+				ProjectFireStore.collection('users')
+					.doc(currentUser.email)
+					.set({
+						...userData,
+						donationMoney: parseInt(donation) + parseInt(Total),
+					})
+				break
+			default:
+				return
+		}
 		SetTotal('')
 	}
 
@@ -186,7 +201,7 @@ const Calculator = () => {
 											color='primary'
 											size='large'
 											type='button'
-											onClick={() => setTotalDonation()}
+											onClick={() => setTotalDonation('money')}
 										>
 											اضف
 										</Button>
@@ -294,7 +309,7 @@ const Calculator = () => {
 											color='primary'
 											size='large'
 											type='button'
-											onClick={() => setTotalDonation()}
+											onClick={() => setTotalDonation('gold')}
 										>
 											اضف
 										</Button>

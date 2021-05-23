@@ -29,7 +29,8 @@ const Profile = () => {
 	//FireStoreData
 	const [FireStoreData, setFireStoreData] = useState([])
 	//donation value
-	const [donation, setDonation] = useState(0)
+	const [donationMoney, setDonationMoney] = useState(0)
+	const [donationGold, setDonationGold] = useState(0)
 	//currentUser
 	const currentUser = useContext(AuthContext).currentUser
 	//error and loading
@@ -119,16 +120,34 @@ const Profile = () => {
 			type: `${InputDisabled ? 'submit' : 'button'}`,
 		},
 		{
-			value: 'RESET DONATION',
+			value: 'RESET GOLD DONATION',
 			color: 'secondary',
-			disabled: donation === 0 ? true : false,
+			disabled: donationGold === 0 ? true : false,
 			onButtonClick: () => {
 				try {
 					ProjectFireStore.collection('users')
 						.doc(currentUser.email)
 						.set({
 							...FireStoreData,
-							donation: 0,
+							donationGold: 0,
+						})
+				} catch {
+					setError('something went wrong! please try again..')
+				}
+			},
+			type: 'button',
+		},
+		{
+			value: 'RESET MONEY DONATION',
+			color: 'secondary',
+			disabled: donationMoney === 0 ? true : false,
+			onButtonClick: () => {
+				try {
+					ProjectFireStore.collection('users')
+						.doc(currentUser.email)
+						.set({
+							...FireStoreData,
+							donationMoney: 0,
 						})
 				} catch {
 					setError('something went wrong! please try again..')
@@ -148,10 +167,15 @@ const Profile = () => {
 				setLastNameValue(snap.data().lastName)
 				setDateValue(new Date(snap.data().date.seconds * 1000))
 				setPhoneNumber(snap.data().phoneNumber)
-				if (snap.data().donation) {
-					setDonation(snap.data().donation)
+				if (snap.data().donationMoney) {
+					setDonationMoney(snap.data().donationMoney)
 				} else {
-					setDonation(0)
+					setDonationMoney(0)
+				}
+				if (snap.data().donationGold) {
+					setDonationGold(snap.data().donationGold)
+				} else {
+					setDonationGold(0)
 				}
 			})
 	}, [currentUser.email])
@@ -258,10 +282,16 @@ const Profile = () => {
 						alignItems='center'
 						className='input-container'
 					>
-						<p>
-							قيمة التبرع المستحقة : {donation} دينار أردني
+						<div>
+							<p>قيمة التبرع المستحقة : {donationMoney} دينار أردني بالمال</p>
 							<hr />
-						</p>
+							<p> قيمة التبرع المستحقة : {donationGold} دينار أردني بالذهب</p>
+							<hr />
+							<p style={{ textAlign: 'center' }}>
+								المجموع :{parseInt(donationGold) + parseInt(donationMoney)}{' '}
+								دينار أردني
+							</p>
+						</div>
 					</Grid>
 					<Grid
 						container

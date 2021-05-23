@@ -53,6 +53,8 @@ const Charities = () => {
 	const [togglePayment, setTogglePayment] = useState(false)
 	const [expectedDonation, setExpectedDonation] = useState(0)
 	const currentUser = useContext(AuthContext).currentUser
+	const [donationMoney, setDonationMoney] = useState(0)
+	const [donationGold, setDonationGold] = useState(0)
 	useEffect(async () => {
 		const data = await getData()
 		if (currentUser) {
@@ -66,7 +68,11 @@ const Charities = () => {
 			await ProjectFireStore.collection('users')
 				.doc(email)
 				.onSnapshot((res) => {
-					setExpectedDonation(res.data().donation)
+					setExpectedDonation(
+						res.data().donationGold + res.data().donationMoney,
+					)
+					setDonationMoney(res.data().donationMoney)
+					setDonationGold(res.data().donationGold)
 				})
 		} catch (error) {
 			console.log(error)
@@ -174,6 +180,8 @@ const Charities = () => {
 									currentUserEmail={currentUser.email}
 									setTogglePayment={setTogglePayment}
 									expectedDonation={expectedDonation}
+									donationMoney={donationMoney}
+									donationGold={donationGold}
 								/>
 							</div>
 						</Backdrop>

@@ -50,7 +50,8 @@ export default class PaymentForm extends React.Component {
 		name: '',
 		number: '',
 		userData: {},
-		expectedDonation: this.props.expectedDonation,
+		expectedMoneyDonation: this.props.donationMoney,
+		expectedGoldDonation: this.props.donationGold,
 		sucess: false,
 	}
 
@@ -78,7 +79,14 @@ export default class PaymentForm extends React.Component {
 
 	onSubmit = async (values) => {
 		try {
-			if (this.state.expectedDonation <= 0 || !this.state.expectedDonation) {
+			if (
+				(this.state.expectedMoneyDonation < 0 ||
+					!this.state.expectedMoneyDonation ||
+					this.state.expectedMoneyDonation > this.props.donationMoney) &&
+				(this.state.expectedGoldDonation < 0 ||
+					!this.state.expectedGoldDonation ||
+					this.state.expectedGoldDonation > this.props.donationGold)
+			) {
 				alert('please enter a valid donation number')
 				return
 			}
@@ -88,7 +96,8 @@ export default class PaymentForm extends React.Component {
 					user: { ...this.state.userData },
 					creditCard: { ...values },
 					donationInformation: {
-						donation: this.state.expectedDonation,
+						donationByGold: this.state.expectedGoldDonation,
+						donationByMoney: this.state.expectedMoneyDonation,
 						date: new Date(),
 						NameOfCharitie: this.props.currentName,
 					},
@@ -99,8 +108,12 @@ export default class PaymentForm extends React.Component {
 			)
 
 			await updatedDonation.update(
-				'donation',
-				this.props.expectedDonation - this.state.expectedDonation,
+				'donationMoney',
+				this.props.donationMoney - this.state.expectedMoneyDonation,
+			)
+			await updatedDonation.update(
+				'donationGold',
+				this.props.donationGold - this.state.expectedGoldDonation,
 			)
 
 			this.setState({ ...this.state, sucess: true })
@@ -108,6 +121,7 @@ export default class PaymentForm extends React.Component {
 				this.setState({ ...this.state, sucess: false })
 			}, 2000)
 			this.props.setTogglePayment(false)
+			window.location.reload()
 		} catch (error) {
 			console.error(error)
 		}
@@ -198,6 +212,20 @@ export default class PaymentForm extends React.Component {
 					<div className='donation-info'>
 						<h4>اسم الجمعية المراد التبرع لها : {this.props.currentName}</h4>
 						<h4>
+							قيمة التبرع المستحقة بالذهب:{' '}
+							{this.props.donationGold
+								? `${this.props.donationGold} 							دينار اردني
+`
+								: 'لا يوجد'}{' '}
+						</h4>
+						<h4>
+							قيمة التبرع المستحقة بالمال:{' '}
+							{this.props.expectedDonation
+								? `${this.props.donationMoney} 							دينار اردني
+`
+								: 'لا يوجد'}{' '}
+						</h4>
+						<h4>
 							قيمة التبرع المستحقة :{' '}
 							{this.props.expectedDonation
 								? `${this.props.expectedDonation} 							دينار اردني
@@ -205,16 +233,33 @@ export default class PaymentForm extends React.Component {
 								: 'لا يوجد'}{' '}
 						</h4>
 
-						<span class='label'>القيمة التي ترغب بالتبرع بها</span>
+						<span class='label'>
+							القيمة التي ترغب بالتبرع بها من قيمة المال
+						</span>
 						<input
 							type='number'
 							className='input'
 							required
-							value={this.state.expectedDonation}
+							value={this.state.expectedMoneyDonation}
 							onChange={(e) =>
 								this.setState({
 									...this.state,
-									expectedDonation: e.target.value,
+									expectedMoneyDonation: e.target.value,
+								})
+							}
+						/>
+						<span class='label'>
+							القيمة التي ترغب بالتبرع بها من قيمة الذهب
+						</span>
+						<input
+							type='number'
+							className='input'
+							required
+							value={this.state.expectedGoldDonation}
+							onChange={(e) =>
+								this.setState({
+									...this.state,
+									expectedGoldDonation: e.target.value,
 								})
 							}
 						/>
