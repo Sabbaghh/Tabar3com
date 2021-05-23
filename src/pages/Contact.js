@@ -18,7 +18,7 @@ const Contact = () => {
 			<form
 				className='ContactForm'
 				method='post'
-				action='https://formspree.io/f/xyybapbz'
+				action='https://formspree.io/f/xbjqgnwd'
 				name='contact'
 			>
 				<input type='text' name='_gotcha' style={{ display: 'none' }} />
