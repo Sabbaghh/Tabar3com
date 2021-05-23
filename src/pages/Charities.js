@@ -25,6 +25,9 @@ const useStyles = makeStyles({
 	media: {
 		height: 140,
 	},
+	description: {
+		height: 140,
+	},
 	backdrop: {
 		zIndex: 2,
 		color: '#fff',
@@ -89,9 +92,14 @@ const Charities = () => {
 									setCurrentData(cha)
 								}}
 								key={cha.name}
+								height='140'
 							>
 								<CardActionArea>
-									<CardMedia className={classes.media} image={cha.image} />
+									<CardMedia
+										height='140'
+										className={classes.media}
+										image={cha.image}
+									/>
 									<CardContent>
 										<Typography gutterBottom variant='h5' component='h2'>
 											{cha.name}
@@ -100,6 +108,7 @@ const Charities = () => {
 											variant='body2'
 											color='textSecondary'
 											component='p'
+											className={classes.description}
 										>
 											{cha.description}
 										</Typography>
