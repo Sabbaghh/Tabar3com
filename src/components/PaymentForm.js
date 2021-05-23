@@ -121,7 +121,6 @@ export default class PaymentForm extends React.Component {
 				this.setState({ ...this.state, sucess: false })
 			}, 2000)
 			this.props.setTogglePayment(false)
-			window.location.reload()
 		} catch (error) {
 			console.error(error)
 		}

@@ -26,6 +26,7 @@ const Profile = () => {
 	//phoneNumber input
 	const [phoneNumber, setPhoneNumber] = useState('')
 	const [InputDisabled, setInputDisabled] = useState(true)
+	const [initilPhoneNumber, setInitialPhoneNumber] = useState('')
 	//FireStoreData
 	const [FireStoreData, setFireStoreData] = useState([])
 	//donation value
@@ -116,6 +117,7 @@ const Profile = () => {
 			disabled: false,
 			onButtonClick: () => {
 				setInputDisabled((prev) => !prev)
+				setError('')
 			},
 			type: `${InputDisabled ? 'submit' : 'button'}`,
 		},
@@ -167,6 +169,7 @@ const Profile = () => {
 				setLastNameValue(snap.data().lastName)
 				setDateValue(new Date(snap.data().date.seconds * 1000))
 				setPhoneNumber(snap.data().phoneNumber)
+				setInitialPhoneNumber(snap.data().phoneNumber)
 				if (snap.data().donationMoney) {
 					setDonationMoney(snap.data().donationMoney)
 				} else {
@@ -185,6 +188,11 @@ const Profile = () => {
 			setError('you must be at least 18 years old')
 			return
 		}
+		if (phoneNumber.length < 9) {
+			setPhoneNumber(initilPhoneNumber)
+			setError('you must enter a valid phone number')
+			return
+		}
 		try {
 			setError('')
 			setLoading('Loading..')
@@ -197,10 +205,11 @@ const Profile = () => {
 					date: DateValue,
 					phoneNumber,
 				})
+			setError('')
+			setLoading(false)
 		} catch {
 			setError('something went wrong! please try again..')
 		}
-		setLoading(false)
 	}
 	return (
 		<Container>
@@ -275,6 +284,10 @@ const Profile = () => {
 							color={phoneNumber.length === 9 ? 'primary' : 'secondary'}
 						/>
 					</Grid>
+					<div style={{ textAlign: 'center', marginTop: '1rem' }}>
+						{error && <span style={{ color: 'red' }}>{error}</span>}
+						{loading && <span style={{ color: 'blue' }}>{loading}</span>}
+					</div>
 					<Grid
 						container
 						direction='row'
@@ -314,8 +327,6 @@ const Profile = () => {
 								</Button>
 							)
 						})}
-						{error && <span style={{ color: 'red' }}>{error}</span>}
-						{loading && <span style={{ color: 'blue' }}>{loading}</span>}
 					</Grid>
 				</form>
 			</Grid>
