@@ -187,7 +187,7 @@ const Profile = () => {
 				alignItems='center'
 			>
 				<form className='profile-form' onSubmit={(e) => onSaveChanges(e)}>
-					<h1 className='profile-header'>الصفحة الشحصية</h1>
+					<h1 className='profile-header'>الصفحة الشخصية</h1>
 					{inputs.map(({ type, label, value, onchange, control }) => {
 						return (
 							<Grid
