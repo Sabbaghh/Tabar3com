@@ -27,7 +27,8 @@ const Register = () => {
 	const [gender, setGender] = useState('')
 	const [date, setDate] = useState(new Date())
 	const passowrdExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/
-	const emailRgx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+	const emailRgx =
+		/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 	const [error, setError] = useState('')
 	const [loading, setLoading] = useState('')
 	const history = useHistory()
@@ -70,6 +71,11 @@ const Register = () => {
 	}
 	const onSignUp = async (e) => {
 		e.preventDefault()
+		if (phoneNumber.length < 9) {
+			setError('you must enter a valid phone number')
+			return
+		}
+
 		if (new Date().getFullYear() - date.getFullYear() < 18) {
 			setError('you must be at least 18 years old')
 			return
@@ -94,7 +100,7 @@ const Register = () => {
 				gender,
 				phoneNumber,
 			})
-			history.push('/profile')
+			// history.push('/profile')
 		} catch {
 			setError('something went wrong! please try again..')
 		}
